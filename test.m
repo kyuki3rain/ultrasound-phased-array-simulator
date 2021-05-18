@@ -1,7 +1,7 @@
 order = 0.001; % 全体で用いる単位長さ(ここではmm)
 alpha = 0.54 * order; % 減衰係数
 x_length = 1; % 最小単位の横の大きさ（mm）
-y_length = 1; % 最小単位の縦の大きさ（mm）
+y_length = 0.1; % 最小単位の縦の大きさ（mm）
 width = 100; % シミュレーション範囲の横の座標
 height = 1000; % シミュレーション範囲の縦の座標
 focus_x = 50; % 焦点の横軸の座標
@@ -15,14 +15,16 @@ w = width / N; % トランスデューサ同士の間隔もしくは幅
 lambda = s / f; % 波の波長
 
 Field = zeros(width, height); % シミュレーション範囲の初期化
-Waves = initialize(N, focus_x, focus_y, lambda, w, a); % トランスデューサの初期化
+Waves = initialize(N, focus_x * x_length, focus_y * y_length, lambda, w, a); % トランスデューサの初期化
 
-for i = 1:N
-    for x = 1:width
-        for y = 1:height
+for x = 1:width
+    for y = 1:height
+        sum = 0;
+        for i = 1:N
             % トランスデューサから出た音波を重ね合わせる
-            Field(x,y) = Field(x,y) + calc_wave(x * x_length, y * y_length, i, Waves(i), lambda, w, alpha);
+            sum = sum + calc_wave(x * x_length, y * y_length, i, Waves(i), lambda, w, alpha);
         end
+        Field(x,y) = sum;
     end
 end
 
