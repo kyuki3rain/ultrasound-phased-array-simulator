@@ -1,17 +1,17 @@
 order = 0.001; % 全体で用いる単位長さ(ここではmm)
 alpha = 0.54 * order; % 減衰係数
-x_length = 1; % 最小単位の横の大きさ（mm）
-y_length = 0.1; % 最小単位の縦の大きさ（mm）
+x_length = 10; % 最小単位の横の大きさ（mm）
+y_length = 0.01; % 最小単位の縦の大きさ（mm）
 width = 100; % シミュレーション範囲の横の座標
 height = 1000; % シミュレーション範囲の縦の座標
 focus_x = 50; % 焦点の横軸の座標
 focus_y = 500; % 焦点の縦軸の座標
 a = 1; % 音波の初期振幅
-N = 50; % トランスデューサの個数
+N = 500; % トランスデューサの個数
 f = 5000000; % 周波数
 s = 340 / order; % 音速
 
-w = width / N; % トランスデューサ同士の間隔もしくは幅
+w = width * x_length / N; % トランスデューサ同士の間隔もしくは幅
 lambda = s / f; % 波の波長
 
 Field = zeros(width, height); % シミュレーション範囲の初期化
@@ -35,6 +35,9 @@ imshow(I)
 
 figure
 plot(abs(Field(:,focus_y)))
+
+figure
+plot(abs(Field(focus_x, :)))
 
 % トランスデューサとの距離を計算（セルの幅と位置を考慮）
 function distance = calc_distance(x, y, i, w)
