@@ -27,9 +27,6 @@ function receive_simulate(Options)
         Transducers(i, 1) = adjusted_wave;
     end
 
-    x = focus_x + 10;
-    y = focus_y;
-
     for x = 1:width
         for y = 1:height
             av = 0;
