@@ -1,6 +1,9 @@
 Options = option_initialize();
 
-Options('a') = 10;
-Options('f') = 5000000;
-% send_simulate(Options);
-receive_simulate(Options);
+Options('a') = 1;
+Options('f') = 40000;
+Options('N') = 10;
+Options('N_length') = 5;
+Options('focus_x') = 50;
+
+reveive_simulate(Options);
