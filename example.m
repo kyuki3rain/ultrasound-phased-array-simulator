@@ -6,4 +6,4 @@ Options('N') = 10;
 Options('N_length') = 5;
 Options('focus_x') = 50;
 
-reveive_simulate(Options);
+receive_simulate(Options);
