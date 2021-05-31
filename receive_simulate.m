@@ -21,25 +21,12 @@ function receive_simulate(Options)
 
     for i = 1:N
         distance = calc_distance(focus_x * x_length, focus_y * y_length, i * N_length + margin, 0);
-        p = -1;
-        if i > 50
-            p = 1;
-        end
         angle = calc_angle(distance, lambda) + 0.05 * pi * 2 * randi([-1 1]);
         m = exp(-alpha * distance);
         adjusted_wave = m * complex(1, 0) * complex(cos(angle), sin(angle));
-        Transducers(i, 1) = adjusted_wave;
-%        Transducers(i, 1) = complex(quantizenumeric(real(adjusted_wave),1,4,3,'ceil'), quantizenumeric(imag(adjusted_wave),1,4,3,'ceil'));
+        % Transducers(i, 1) = adjusted_wave;
+        Transducers(i, 1) = complex(quantizenumeric(real(adjusted_wave),1,10,9,'ceil'), quantizenumeric(imag(adjusted_wave),1,10,9,'ceil'));
     end
-
-    figure
-    plot(Transducers);
-    
-    figure
-    plot(real(Transducers));
-    
-    figure
-    plot(imag(Transducers));
 
     for x = 1:width
         for y = 1:height
