@@ -12,6 +12,7 @@ function send_simulate(Options)
     N_length = Options('N_length');
     f = Options('f');
     s = Options('s') / order;
+    t = 0.2;
 
     lambda = s / f; % 波の波長
     margin = (width * x_length - N * N_length) / 2; % シミュレーション範囲の左端からトランスデューサの左端までの余白
@@ -34,5 +35,62 @@ function send_simulate(Options)
         end
     end
 
-    draw(Field, focus_x, focus_y, order)
+    Field = abs(Field).^2;
+    mx = max(Field,[],'all');
+    draw(Field, focus_x, focus_y, order);
+
+    s_count = 1;
+    r_count = 1;
+    before_x = 0;
+    before_y = 0;
+
+    angle = atan(focus_y * y_length / abs(focus_x * x_length - width / 2 * x_length));
+    for i = 1:N
+        if Field(focus_x + round(i * sin(angle)), focus_y + round(i * cos(angle))) < mx * t
+            break;
+        else
+            if round(i * sin(angle)) > before_x && round(i * cos(angle)) > before_y
+                s_count = s_count + 1;
+            end
+            before_x = round(i * sin(angle));
+            before_y = round(i * cos(angle));
+        end
+    end
+    for i = 1:N
+        if Field(focus_x - round(i * sin(angle)), focus_y - round(i * cos(angle))) < mx * t
+            break;
+        else
+            if round(i * sin(angle)) > before_x || round(i * cos(angle)) > before_y
+                s_count = s_count + 1;
+            end
+            before_x = round(i * sin(angle));
+            before_y = round(i * cos(angle));
+        end
+    end
+    for i = 1:N
+        if Field(focus_x + round(i * cos(angle)), focus_y - round(i * sin(angle))) < mx * t
+            break;
+        else
+            if round(i * cos(angle)) > before_x || round(i * sin(angle)) > before_y
+                r_count = r_count + 1;
+            end
+            before_x = round(i * cos(angle));
+            before_y = round(i * sin(angle));
+        end
+    end
+    for i = 1:N
+        if Field(focus_x - round(i * cos(angle)), focus_y + round(i * sin(angle))) < mx * t
+            break;
+        else
+            if round(i * cos(angle)) > before_x || round(i * sin(angle)) > before_y
+                r_count = r_count + 1;
+            end
+            before_x = round(i * cos(angle));
+            before_y = round(i * sin(angle));
+        end
+    end
+
+    disp(s_count);
+    disp(r_count);
+    disp(nnz(Field >= mx * t));
 end
